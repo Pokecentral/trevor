@@ -46,11 +46,14 @@ public class TrevorCommon implements TrevorAPI {
 
     this.data = new InstanceData();
 
+    // TODO: It might be better to, instead of a null-check, catch an exception
     this.database = platform.getDatabaseConfiguration().create(platform, data, gson);
+    if (database == null) {
+      state = TrevorState.FAILED;
+      return false;
+    }
 
     this.proxy = new DatabaseProxyImpl(platform, database);
-
-    // TODO Should we do a database health check here before true / false?
 
     return true;
   }

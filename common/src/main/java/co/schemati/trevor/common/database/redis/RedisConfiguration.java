@@ -4,8 +4,10 @@ import co.schemati.trevor.api.data.Platform;
 import co.schemati.trevor.api.database.DatabaseConfiguration;
 import co.schemati.trevor.api.instance.InstanceData;
 import com.google.gson.Gson;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.exceptions.JedisException;
 
 public class RedisConfiguration implements DatabaseConfiguration {
 
@@ -34,6 +36,15 @@ public class RedisConfiguration implements DatabaseConfiguration {
     config.setMaxTotal(maxConnections);
 
     JedisPool pool = new JedisPool(config, address, port, timeout, password, useSSL);
+
+    try (Jedis jedis = pool.getResource()) {
+      jedis.ping();
+    } catch (JedisException e) {
+      e.printStackTrace();
+      platform.log("Failed to ping redis database. Are your database credentials OK?");
+      pool.close();
+      return null;
+    }
 
     return new RedisDatabase(platform, data, pool, gson);
   }
