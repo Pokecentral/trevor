@@ -44,7 +44,7 @@ public class TrevorVelocity {
 
     this.common = new TrevorCommon(platform);
 
-    if (!platform.init()) {
+    if (!common.initPlatform()) {
       platform.log("Trevor failed to load platform... Shutting down.");
       return;
     }

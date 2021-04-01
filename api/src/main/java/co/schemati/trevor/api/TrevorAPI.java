@@ -37,4 +37,11 @@ public interface TrevorAPI {
    * @return the database proxy
    */
   DatabaseProxy getDatabaseProxy();
+
+  /**
+   * Returns the api's {@link TrevorState}.
+   *
+   * @return the current api state
+   */
+  TrevorState getState();
 }

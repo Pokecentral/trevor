@@ -2,6 +2,7 @@ package co.schemati.trevor.common;
 
 import co.schemati.trevor.api.TrevorAPI;
 import co.schemati.trevor.api.TrevorService;
+import co.schemati.trevor.api.TrevorState;
 import co.schemati.trevor.api.data.Platform;
 import co.schemati.trevor.api.database.Database;
 import co.schemati.trevor.api.database.DatabaseConnection;
@@ -20,8 +21,21 @@ public class TrevorCommon implements TrevorAPI {
 
   private InstanceData data;
 
+  private TrevorState state = TrevorState.NOT_LOADED;
+
   public TrevorCommon(Platform platform) {
     this.platform = platform;
+  }
+
+  public boolean initPlatform() {
+    boolean success = platform.init();
+
+    if (!success) {
+      state = TrevorState.FAILED;
+      return false;
+    }
+
+    return true;
   }
 
   public boolean load() {
@@ -36,19 +50,32 @@ public class TrevorCommon implements TrevorAPI {
 
     this.proxy = new DatabaseProxyImpl(platform, database);
 
+    // TODO Should we do a database health check here before true / false?
+
     return true;
   }
 
   public boolean start() {
-    return database.init(proxy);
+    boolean inited = database.init(proxy);
+
+    if (!inited) {
+      state = TrevorState.FAILED;
+      return false;
+    }
+
+    state = TrevorState.RUNNING;
+    return true;
   }
 
   public boolean stop() {
+    state = TrevorState.STOPPED;
+
     if (database != null) {
       database.open().thenAccept(DatabaseConnection::shutdown).join();
 
       database.kill();
     }
+
     return true;
   }
 
@@ -66,6 +93,10 @@ public class TrevorCommon implements TrevorAPI {
 
   public DatabaseProxyImpl getDatabaseProxy() {
     return proxy;
+  }
+
+  public TrevorState getState() {
+    return state;
   }
 
   public static Gson gson() {

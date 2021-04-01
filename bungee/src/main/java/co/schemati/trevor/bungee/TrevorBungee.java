@@ -15,16 +15,25 @@ public class TrevorBungee extends Plugin {
     this.platform = new BungeePlatform(this);
     this.common = new TrevorCommon(platform);
 
-    platform.init();
+    if (!common.initPlatform()) {
+      platform.log("Trevor failed to load platform... Shutting down.");
+      return;
+    }
 
-    common.load();
+    if (!common.load()) {
+      platform.log("Trevor failed to load... Shutting down.");
+      return;
+    }
   }
 
   @Override
   public void onEnable() {
     getProxy().getPluginManager().registerListener(this, new BungeeListener(this));
 
-    common.start();
+    if (!common.start()) {
+      platform.log("Trevor failed to start... Shutting down.");
+      return;
+    }
   }
 
   @Override

@@ -1,5 +1,7 @@
 package co.schemati.trevor.api;
 
+import java.util.Optional;
+
 /**
  * Represents a place to retrieve the provided {@link TrevorAPI}.
  */
@@ -21,7 +23,7 @@ public class TrevorService {
    * Provides an implementation of {@link TrevorAPI}.
    *
    * <br>
-   *
+   * <p>
    * If an implementation is already defined, a {@link IllegalStateException} is thrown.
    *
    * @param api the api
@@ -36,5 +38,21 @@ public class TrevorService {
       }
     }
     throw new IllegalStateException("Singleton TrevorAPI cannot be redefined.");
+  }
+
+  /**
+   * Returns the state of the active api. If this is called before the Trevor implementation provided the api to the
+   * service, an empty optional is returned.
+   *
+   * @return The state of the api
+   */
+  public static Optional<TrevorState> getState() {
+    TrevorAPI api = TrevorService.api;
+
+    if (api == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(api.getState());
   }
 }
