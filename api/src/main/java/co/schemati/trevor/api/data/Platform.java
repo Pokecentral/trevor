@@ -55,4 +55,9 @@ public interface Platform {
    * @see Strings#format
    */
   void log(String message, Object... values);
+
+  /**
+   * Gracefully shuts the platform down.
+   */
+  void shutdown();
 }

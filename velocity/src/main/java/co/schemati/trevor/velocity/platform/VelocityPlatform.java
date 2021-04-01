@@ -4,6 +4,8 @@ import co.schemati.trevor.api.network.event.EventProcessor;
 import co.schemati.trevor.api.util.Strings;
 import co.schemati.trevor.common.platform.AbstractPlatformBase;
 import co.schemati.trevor.velocity.TrevorVelocity;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class VelocityPlatform extends AbstractPlatformBase {
 
@@ -40,5 +42,10 @@ public class VelocityPlatform extends AbstractPlatformBase {
   @Override
   public void log(String message, Object... values) {
     plugin.getLogger().info(Strings.format(message, values));
+  }
+
+  @Override
+  public void shutdown() {
+    plugin.getProxy().shutdown(Component.text("Velocity failed to initialize").color(NamedTextColor.RED));
   }
 }

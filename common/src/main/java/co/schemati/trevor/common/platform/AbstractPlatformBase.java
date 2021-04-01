@@ -33,8 +33,9 @@ public abstract class AbstractPlatformBase implements Platform {
 
   private void createInstanceConfig(ConfigurationNode node) {
     String id = node.getNode("id").getString();
+    boolean shutdownOnFailure = node.getNode("shutdown-on-failure").getBoolean(false);
 
-    this.instanceConfiguration = new InstanceConfiguration(id);
+    this.instanceConfiguration = new InstanceConfiguration(id, shutdownOnFailure);
   }
 
   private void createDatabaseConfig(ConfigurationNode node) {

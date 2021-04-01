@@ -32,6 +32,9 @@ public class TrevorCommon implements TrevorAPI {
 
     if (!success) {
       state = TrevorState.FAILED;
+      if (platform.getInstanceConfiguration().shouldShutdownOnFailure()) {
+        platform.shutdown();
+      }
       return false;
     }
 
@@ -50,6 +53,9 @@ public class TrevorCommon implements TrevorAPI {
     this.database = platform.getDatabaseConfiguration().create(platform, data, gson);
     if (database == null) {
       state = TrevorState.FAILED;
+      if (platform.getInstanceConfiguration().shouldShutdownOnFailure()) {
+        platform.shutdown();
+      }
       return false;
     }
 
@@ -63,6 +69,9 @@ public class TrevorCommon implements TrevorAPI {
 
     if (!inited) {
       state = TrevorState.FAILED;
+      if (platform.getInstanceConfiguration().shouldShutdownOnFailure()) {
+        platform.shutdown();
+      }
       return false;
     }
 

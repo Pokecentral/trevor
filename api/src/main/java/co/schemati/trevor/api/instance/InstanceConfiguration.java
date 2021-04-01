@@ -6,14 +6,17 @@ package co.schemati.trevor.api.instance;
 public class InstanceConfiguration {
 
   private final String id;
+  private final boolean shutdownOnFailure;
 
   /**
    * Construct a new InstanceConfiguration.
    *
    * @param id the instance id
+   * @param shutdownOnFailure if the proxy should shut down when initialization fails
    */
-  public InstanceConfiguration(String id) {
+  public InstanceConfiguration(String id, boolean shutdownOnFailure) {
     this.id = id;
+    this.shutdownOnFailure = shutdownOnFailure;
   }
 
   /**
@@ -27,5 +30,12 @@ public class InstanceConfiguration {
    */
   public String getID() {
     return id;
+  }
+
+  /**
+   * @return whether if the proxy should shut down when trevor fails to initialize
+   */
+  public boolean shouldShutdownOnFailure() {
+    return shutdownOnFailure;
   }
 }

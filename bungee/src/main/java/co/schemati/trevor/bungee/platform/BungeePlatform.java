@@ -41,4 +41,9 @@ public class BungeePlatform extends AbstractPlatformBase {
   public void log(String message, Object... values) {
     plugin.getLogger().info(Strings.format(message, values));
   }
+
+  @Override
+  public void shutdown() {
+    plugin.getProxy().stop("Trevor failed to initialize");
+  }
 }
