@@ -1,5 +1,6 @@
 package co.schemati.trevor.bungee;
 
+import co.schemati.trevor.api.TrevorState;
 import co.schemati.trevor.bungee.platform.BungeeListener;
 import co.schemati.trevor.bungee.platform.BungeePlatform;
 import co.schemati.trevor.common.TrevorCommon;
@@ -28,6 +29,11 @@ public class TrevorBungee extends Plugin {
 
   @Override
   public void onEnable() {
+    if (common.getState() == TrevorState.FAILED) {
+      platform.log("Trevor state is FAILED - Skipping onEnable logic.");
+      return;
+    }
+
     getProxy().getPluginManager().registerListener(this, new BungeeListener(this));
 
     if (!common.start()) {
