@@ -97,7 +97,9 @@ public class RedisDatabase implements Database {
       heartbeat.cancel(true);
     }
 
-    intercom.kill();
+    if (intercom != null) {
+      intercom.kill();
+    }
   }
 
   protected Jedis getResource() {
