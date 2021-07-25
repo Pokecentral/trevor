@@ -169,4 +169,10 @@ public class RedisConnection implements DatabaseConnection {
   public void close() {
     connection.close();
   }
+
+  @Nullable
+  @Override
+  public Map<String, String> getUserInformation(UUID uuid) {
+    return connection.hgetAll(replace(PLAYER_DATA, uuid.toString()));
+  }
 }

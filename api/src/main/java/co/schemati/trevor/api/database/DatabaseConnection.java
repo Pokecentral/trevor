@@ -7,6 +7,7 @@ import co.schemati.trevor.api.network.payload.DisconnectPayload;
 
 import javax.annotation.Nullable;
 import java.io.Closeable;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -156,4 +157,14 @@ public interface DatabaseConnection extends Closeable {
    * issues with all plugins relying on the API.
    */
   void shutdown();
+
+  /**
+   * Gets stored information about specific user. See {@link User#toDatabaseMap(String)}.
+   *
+   * @param uuid the UUID of the player to get the data from.
+   *
+   * @return The data in the database. If the player does not exist, this may return null.
+   */
+  @Nullable
+  Map<String, String> getUserInformation(UUID uuid);
 }
